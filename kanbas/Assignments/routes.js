@@ -13,9 +13,17 @@ export default function AssignmentRoutes(app) {
 
   // delete an assignment
   app.delete("/api/courses/:courseId/assignments/:assignmentId", (req, res) => {
-    const { assignmentId } = req.params;
-    const assignments = assignmentsDao.deleteAssignment(assignmentId);
-    res.sendStatus(204).json(assignments);
+    const { courseId, assignmentId } = req.params;
+    try {
+      const assignments = assignmentsDao.deleteAssignment(
+        courseId,
+        assignmentId
+      );
+      res.status(200).json(assignments);
+    } catch (error) {
+      console.error("Error deleting assignment:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
   });
 
   app.get("/api/courses/:courseId/assignments/:assignmentId", (req, res) => {
