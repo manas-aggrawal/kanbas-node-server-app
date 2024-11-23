@@ -1,4 +1,5 @@
 import Database from "../Database/index.js";
+
 export function findAssignmentsForCourse(courseId) {
   const { assignments } = Database;
   return assignments.filter((assignment) => assignment.course === courseId);
@@ -10,10 +11,11 @@ export function createAssignment(assignment) {
   return newAssignment;
 }
 
-export function updateAssignment(assignmentId, assignmentUpdates) {
+export function updateAssignment(assignmentId, courseId, assignmentUpdates) {
   const { assignments } = Database;
   const assignment = assignments.find(
-    (assignment) => assignment._id === assignmentId
+    (assignment) =>
+      assignment._id === assignmentId && assignment.course === courseId
   );
   if (!assignment) {
     throw new Error(`Assignment with ID ${assignmentId} not found.`);

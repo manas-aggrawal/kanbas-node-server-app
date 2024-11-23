@@ -2,13 +2,15 @@ import * as assignmentsDao from "./dao.js";
 export default function AssignmentRoutes(app) {
   // update an assignment
   app.put("/api/courses/:courseId/assignments/:assignmentId", (req, res) => {
-    const { assignmentId } = req.params;
+    const { assignmentId, courseId } = req.params;
     const assignmentUpdates = req.body;
     const updatedAssignment = assignmentsDao.updateAssignment(
       assignmentId,
+      courseId,
       assignmentUpdates
     );
-    res.sendStatus(204).json(updatedAssignment);
+
+    res.status(204).json(updatedAssignment);
   });
 
   // delete an assignment
@@ -21,7 +23,6 @@ export default function AssignmentRoutes(app) {
       );
       res.status(200).json(assignments);
     } catch (error) {
-      console.error("Error deleting assignment:", error);
       res.status(500).json({ error: "Internal server error" });
     }
   });
