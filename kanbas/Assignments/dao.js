@@ -22,10 +22,11 @@ export function updateAssignment(assignmentId, assignmentUpdates) {
   return assignment;
 }
 
-export function deleteAssignment(assignmentId) {
+export function deleteAssignment(courseId, assignmentId) {
   const { assignments } = Database;
   Database.assignments = assignments.filter(
-    (assignment) => assignment._id !== assignmentId
+    (assignment) =>
+      assignment._id !== assignmentId && courseId === assignment.course
   );
   return Database.assignments;
 }
