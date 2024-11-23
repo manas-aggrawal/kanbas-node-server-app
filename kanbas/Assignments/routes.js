@@ -1,30 +1,26 @@
-import Database from "../Database/index.js";
-export function findAssignmentsForCourse(courseId) {
-  const { assignments } = Database;
-  return assignments.filter((assignment) => assignment.course === courseId);
-}
-export function createAssignment(assignment) {
-  const newAssignment = { ...assignment, _id: Date.now().toString() };
-  Database.assignments = [...Database.assignments, newAssignment];
+import * as assignmentsDao from "./dao.js";
+export default function AssignmentRoutes(app) {
+  // update an assignment
+  app.put("/api/courses/:courseId/assignments/:assignmentId", (req, res) => {
+    const { assignmentId } = req.params;
+    const assignmentUpdates = req.body;
+    const updatedAssignment = assignmentsDao.updateAssignment(
+      assignmentId,
+      assignmentUpdates
+    );
+    res.sendStatus(204).json(updatedAssignment);
+  });
 
-  return newAssignment;
-}
+  // delete an assignment
+  app.delete("/api/courses/:courseId/assignments/:assignmentId", (req, res) => {
+    const { assignmentId } = req.params;
+    const assignments = assignmentsDao.deleteAssignment(assignmentId);
+    res.sendStatus(204).json(assignments);
+  });
 
-export function updateAssignment(assignmentId, assignmentUpdates) {
-  const { assignments } = Database;
-  const assignment = assignments.find(
-    (assignment) => assignment._id === assignmentId
-  );
-  if (!assignment) {
-    throw new Error(`Assignment with ID ${assignmentId} not found.`);
-  }
-  Object.assign(assignment, assignmentUpdates);
-  return assignment;
-}
-
-export function deleteAssignment(assignmentId) {
-  const { assignments } = Database;
-  Database.assignments = assignments.filter(
-    (assignment) => assignment._id !== assignmentId
-  );
+  app.get("/api/courses/:courseId/assignments/:assignmentId", (req, res) => {
+    const { courseId } = req.params;
+    const result = assignmentsDao.findAssignmentsForCourse(courseId);
+    res.sendStatus(200).json(result);
+  });
 }
