@@ -8,6 +8,7 @@ import UserRoutes from "./kanbas/Users/routes.js";
 import ModuleRoutes from "./kanbas/Modules/routes.js";
 import EnrollmentRoutes from "./kanbas/Enrollments/routes.js";
 import AssignmentRoutes from "./kanbas/Assignments/routes.js";
+import "dotenv/config";
 
 const app = express();
 app.use(
@@ -21,7 +22,6 @@ const sessionOptions = {
   resave: false,
   saveUninitialized: false,
 };
-
 if (process.env.NODE_ENV !== "development") {
   sessionOptions.proxy = true;
   sessionOptions.cookie = {
