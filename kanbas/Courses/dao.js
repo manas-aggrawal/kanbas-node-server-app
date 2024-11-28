@@ -1,7 +1,9 @@
 import Database from "../Database/index.js";
+
 export function findAllCourses() {
   return Database.courses;
 }
+
 export function findCoursesForEnrolledUser(userId) {
   const { courses, enrollments } = Database;
   const enrolledCourses = courses.filter((course) =>
@@ -25,8 +27,11 @@ export function deleteCourse(courseId) {
   );
 }
 export function updateCourse(courseId, courseUpdates) {
-  const { courses } = Database;
+  const { courses, enrollments } = Database;
   const course = courses.find((course) => course._id === courseId);
+  // const enrolledCourse = enrollments.find((course) => course._id === courseId);
   Object.assign(course, courseUpdates);
+  // Object.assign(enrolledCourse, courseUpdates);
+
   return course;
 }

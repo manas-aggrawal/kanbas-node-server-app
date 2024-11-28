@@ -18,7 +18,7 @@ export function updateAssignment(assignmentId, courseId, assignmentUpdates) {
       assignment._id === assignmentId && assignment.course === courseId
   );
   if (!assignment) {
-    throw new Error(`Assignment with ID ${assignmentId} not found.`);
+    createAssignment(assignmentUpdates);
   }
   Object.assign(assignment, assignmentUpdates);
   return assignment;
