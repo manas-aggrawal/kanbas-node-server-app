@@ -9,14 +9,17 @@ export default function CourseRoutes(app) {
   app.delete("/api/courses/:courseId", (req, res) => {
     const { courseId } = req.params;
     dao.deleteCourse(courseId);
-    res.sendStatus(204);
+    res.status(204);
   });
   app.put("/api/courses/:courseId", (req, res) => {
+    const currentUser = req.session["currentUser"];
+    if (!currentUser) res.status(401).send("user not authenticated");
+
     const { courseId } = req.params;
     const courseUpdates = req.body;
 
-    const course = dao.updateCourse(courseId, courseUpdates);
-    res.sendStatus(204).json(course);
+    const data = dao.updateCourse(courseId, courseUpdates);
+    res.status(204).json(data);
   });
 
   // create a new module for a course
