@@ -9,9 +9,9 @@ export default function EnrollmentRoutes(app) {
   // write to enroll and unenroll users in courses
   app.post("/api/enrollments", (req, res) => {
     const { user, course } = req.body;
-    dao.enrollUserInCourse(user, course);
+    const data = dao.enrollUserInCourse(user, course);
 
-    res.sendStatus(201);
+    res.status(201).json(data);
   });
   app.delete("/api/enrollments/:user/:course", (req, res) => {
     const { user, course } = req.params;

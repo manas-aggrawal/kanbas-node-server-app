@@ -1,14 +1,29 @@
 import courses from "../Database/courses.js";
 import Database from "../Database/index.js";
+
 export function enrollUserInCourse(userId, courseId) {
-  const { enrollments } = Database;
+  const { courses, enrollments } = Database;
   enrollments.push({ _id: Date.now(), user: userId, course: courseId });
+  const enrolledCourseIds = enrollments
+    .filter((enrollment) => enrollment.user === userId)
+    .map((e) => e.course);
+  const enrolledCourses = courses.filter((c) =>
+    enrolledCourseIds.includes(c._id)
+  );
+  return enrolledCourses;
 }
 export function unenrollUserFromCourse(userId, courseId) {
   const { enrollments } = Database;
   Database.enrollments = enrollments.filter(
     (enrollment) => enrollment.user !== userId || enrollment.course !== courseId
   );
+  const enrolledCourseIds = enrollments
+    .filter((enrollment) => enrollment.user === userId)
+    .map((e) => e.course);
+  const enrolledCourses = courses.filter((c) =>
+    enrolledCourseIds.includes(c._id)
+  );
+  return enrolledCourses;
 }
 // function to find all enrollments for a user (helper function)
 export function findCoursesForEnrolledUser(userId) {
@@ -19,6 +34,7 @@ export function findCoursesForEnrolledUser(userId) {
   const enrolledCourses = courses.filter((c) =>
     enrolledCourseIds.includes(c._id)
   );
+
   return enrolledCourses;
 }
 
