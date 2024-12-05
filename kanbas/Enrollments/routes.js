@@ -1,8 +1,12 @@
 import * as dao from "./dao.js";
+import * as coursesDao from "../Courses/dao.js";
+
 export default function EnrollmentRoutes(app) {
-  app.get("/api/enrollments/:userId", (req, res) => {
+  app.get("/api/enrollments/:userId", async (req, res) => {
     const { userId } = req.params;
-    const enrollments = dao.findCoursesForEnrolledUser(userId);
+
+    const enrollments = await coursesDao.findCoursesForEnrolledUser(userId);
+
     res.json(enrollments);
   });
 
@@ -13,12 +17,13 @@ export default function EnrollmentRoutes(app) {
 
     res.status(201).json(data);
   });
-  app.delete("/api/enrollments/:user/:course", (req, res) => {
+  app.delete("/api/enrollments/:user/:course", async (req, res) => {
     const { user, course } = req.params;
+
     if (!user || !course) {
       return res.status(400).json({ error: "User and course are required." });
     }
-    dao.unenrollUserFromCourse(user, course);
+    await dao.unenrollUserFromCourse(user, course);
 
     res.sendStatus(204);
   });
