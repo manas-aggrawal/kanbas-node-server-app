@@ -54,4 +54,14 @@ export default function EnrollmentRoutes(app) {
       });
     }
   });
+
+  app.get("/api/courses/:courseId/users", async (req, res) => {
+    try {
+      const { courseId } = req.params;
+      const data = await dao.findUsersForCourse(courseId);
+      res.status(200).send(data);
+    } catch (err) {
+      res.status(500).send(`${err}`);
+    }
+  });
 }

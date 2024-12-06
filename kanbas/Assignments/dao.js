@@ -1,34 +1,63 @@
-import Database from "../Database/index.js";
+import model from "./model.js";
 
-export function findAssignmentsForCourse(courseId) {
-  const { assignments } = Database;
+function generateId() {
+  const length = Math.floor(Math.random() * 3) + 5; // Random length between 5 and 7
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let id = "";
+
+  for (let i = 0; i < length; i++) {
+    id += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  console.log("🚀 ~ generateId ~ id:", id);
+  return id;
+}
+
+export async function findAssignmentsForCourse(courseId) {
+  const assignments = await model.find();
   return assignments.filter((assignment) => assignment.course === courseId);
 }
-export function createAssignment(assignment) {
-  const newAssignment = { ...assignment, _id: Date.now().toString() };
-  Database.assignments = [...Database.assignments, newAssignment];
+
+export async function createAssignment(assignment) {
+  const _id = assignment?._id?.trim() || generateId();
+  const newAssignment = await model.create({
+    ...assignment, // Include other fields
+    _id,
+    course: assignment?.course, // Set the course field
+  });
 
   return newAssignment;
 }
 
-export function updateAssignment(assignmentId, courseId, assignmentUpdates) {
-  const { assignments } = Database;
-  const assignment = assignments.find(
-    (assignment) =>
-      assignment._id === assignmentId && assignment.course === courseId
+export async function updateAssignment(
+  assignmentId,
+  courseId,
+  assignmentUpdates
+) {
+  const assignment = await model.findOneAndUpdate(
+    {
+      _id: assignmentId, // Filter by assignmentId
+      course: courseId, // Filter by courseId
+    },
+    {
+      $set: {
+        ...assignmentUpdates, // Fields to update
+      },
+    },
+    {
+      newDocument: true, // Return the updated document
+      upsert: true, // Perform upsert (insert if no document matches)
+      runValidators: true, // Validate the document against the schema
+    }
   );
-  if (!assignment) {
-    createAssignment(assignmentUpdates);
-  }
-  Object.assign(assignment, assignmentUpdates);
+  console.log("🚀 ~ assignment:", assignment);
+
   return assignment;
 }
 
-export function deleteAssignment(courseId, assignmentId) {
-  const { assignments } = Database;
-  Database.assignments = assignments.filter(
-    (assignment) =>
-      assignment._id !== assignmentId && courseId === assignment.course
-  );
-  return Database.assignments;
+export async function deleteAssignment(courseId, assignmentId) {
+  return model.deleteOne({
+    course: courseId, // Use dot notation for nested fields
+    _id: assignmentId,
+  });
 }
