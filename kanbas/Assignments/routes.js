@@ -7,7 +7,7 @@ export default function AssignmentRoutes(app) {
     async (req, res) => {
       const { assignmentId, courseId } = req.params;
       const assignmentUpdates = req.body;
-      console.log("🚀 ~ assignmentUpdates:", assignmentUpdates);
+
       const updatedAssignment = await assignmentsDao.updateAssignment(
         assignmentId,
         courseId,

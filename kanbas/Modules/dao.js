@@ -2,6 +2,7 @@ import model from "./model.js";
 
 export async function findModulesForCourse(courseId) {
   const data = await model.find({ course: courseId }).populate("course");
+
   return data;
 }
 export function createModule(module) {
