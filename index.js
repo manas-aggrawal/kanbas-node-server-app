@@ -8,7 +8,7 @@ import UserRoutes from "./Kanbas/Users/routes.js";
 import ModuleRoutes from "./Kanbas/Modules/routes.js";
 import EnrollmentRoutes from "./Kanbas/Enrollments/routes.js";
 import AssignmentRoutes from "./Kanbas/Assignments/routes.js";
-import QuizRoutes from "./Kanbas/Quizzes/routes.js";
+import QuizRoutes from "./kanbas/quizzes/routes.js";
 import "dotenv/config";
 import mongoose from "mongoose";
 
