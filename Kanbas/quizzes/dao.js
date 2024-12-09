@@ -6,7 +6,6 @@ import QuizModel from "./model.js";
  * @returns {Promise<Array>} - List of quizzes belonging to the course.
  */
 export function findQuizzesForCourse(courseId) {
-  console.log("Finding quizzes for course", courseId);
   return QuizModel.find({ course: courseId });
 }
 

@@ -44,7 +44,7 @@ export default function QuizRoutes(app) {
 
     try {
       const quizzes = await quizzesDao.findQuizById(qid);
-      console.log("Quiz:", quizzes);
+
       res.json(quizzes);
     } catch (error) {
       console.error("Error fetching quiz:", error);
@@ -137,17 +137,11 @@ export default function QuizRoutes(app) {
 
     const userId = currentUser && currentUser._id; // Assumes user is authenticated and user info is in req.user
 
-    console.log("are we here?");
     if (!userId) {
       return res
         .status(401)
         .json({ error: "Unauthorized: User not authenticated" });
     }
-
-    // Validate quiz ID
-    // if (!mongoose.Types.ObjectId.isValid(qid)) {
-    //   return res.status(400).json({ error: `Invalid quiz ID: ${qid}` });
-    // }
 
     try {
       const updatedQuiz = await quizzesDao.incrementUserAttempt(

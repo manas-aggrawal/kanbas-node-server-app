@@ -9,7 +9,7 @@ function generateId() {
   for (let i = 0; i < length; i++) {
     id += chars.charAt(Math.floor(Math.random() * chars.length));
   }
-  console.log("🚀 ~ generateId ~ id:", id);
+
   return id;
 }
 
@@ -50,7 +50,6 @@ export async function updateAssignment(
       runValidators: true, // Validate the document against the schema
     }
   );
-  console.log("🚀 ~ assignment:", assignment);
 
   return assignment;
 }
