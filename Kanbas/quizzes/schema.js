@@ -1,116 +1,61 @@
+// schema.js
+
 import mongoose from "mongoose";
 
-const optionSchema = new mongoose.Schema({
-    option: {
-        type: String
-    }
-})
+// Define a schema for tracking user attempts
+const attemptSchema = new mongoose.Schema(
+  {
+    user: { type: mongoose.Schema.Types.String, ref: "User", required: true },
+    count: { type: Number, default: 0 },
+    lastScore: { type: Number, default: 0 },
+  },
+  { _id: false }
+);
 
-const questionSchema = new mongoose.Schema({
-    title: {
-        type: String
-    },
-    type: {
-        type: String,
-        enum: ['Multiple Choice', 'True/False', 'Fill in the Blank'],
-        required: true
-    },
-    points: {
-        type: Number,
-        default: 1
-    },
-    question:
-    {
-        type: String,
-        required: true
-    },
-
-    options: [optionSchema],
-
-    correct_option: {
-        type: Number,
-        required: true
-    }
+const choiceSchema = new mongoose.Schema({
+  correct: { type: Boolean, default: false },
+  answer: { type: String },
 });
 
-const quizSchema = new mongoose.Schema({
-    course_id: {
-        type: String,
-        required: true
+const questionSchema = new mongoose.Schema({
+  title: { type: String },
+  type: { type: String, default: "Multiple Choice" },
+  points: { type: Number, default: 0 },
+  question: { type: String, required: true },
+  choices: [choiceSchema],
+});
+
+// Define the Quiz schema
+const quizSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    course: {
+      type: mongoose.Schema.Types.String,
+      ref: "Course",
+      required: true,
     },
-    title: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String
-    },
-    published: {
-        type: Boolean,
-        default: false
-    },
-    available: {
-        type: Date,
-        required: true
-    },
-    available_until: {
-        type: Date,
-        required: true
-    },
-    due: {
-        type: Date,
-        required: true
-    },
-    quiz_type: {
-        type: String,
-        enum: ['Graded Quiz', 'Practice Quiz', 'Graded Survey', 'Ungraded Survey'],
-        default: 'Graded Quiz'
-    },
-    points: {
-        type: Number,
-        default: 0
-    },
-    assignment_group: {
-        type: String,
-        enum: ['Quizzes', 'Exams', 'Assignments', 'Projects'],
-        default: 'Quizzes'
-    },
-    shuffle_answers: {
-        type: Boolean,
-        default: true
-    },
-    time_limit: {
-        type: Number,
-        default: 20 // in minutes
-    },
-    multiple_attempts: {
-        type: Boolean,
-        default: false
-    },
-    show_correct_answers: {
-        type: String,
-        enum: ['Immediately', 'After Submitted', 'Never'], // think these are all the options
-        default: 'After Submitted'
-    },
-    access_code: {
-        type: String,
-        default: ''
-    },
-    one_question_at_a_time: {
-        type: Boolean,
-        default: true
-    },
-    webcam_required: {
-        type: Boolean,
-        default: false
-    },
-    lock_questions_after_answering: {
-        type: Boolean,
-        default: false
-    },
-    questions: [questionSchema] // Embedding questions within the quiz document
-},
-    { collection: "quizzes" }
+    description: { type: String },
+    points: { type: Number },
+    dueDate: { type: Date },
+    published: { type: Boolean, default: false },
+    allowMultipleAttempts: { type: Boolean, default: false },
+    assignTo: { type: String, default: "Everyone" },
+    assignmentGroup: { type: String, default: "Quizzes" },
+    quizType: { type: String, default: "Graded Quiz" },
+    shuffleAnswers: { type: Boolean, default: true },
+    timeLimit: { type: Number, default: 20 },
+    availableFrom: { type: Date },
+    availableUntil: { type: Date },
+    attempts: [attemptSchema],
+    questions: [questionSchema],
+    accessCode: { type: String },
+    lockQuestions: { type: Boolean, default: false },
+    oneQuestionAtATime: { type: Boolean, default: true },
+    showCorrectAnswers: { type: String, default: "Immediately" },
+    webcam: { type: Boolean, default: false },
+    maxAttempts: { type: Number, default: 1 },
+  },
+  { collection: "quizzes" }
 );
 
 export default quizSchema;
