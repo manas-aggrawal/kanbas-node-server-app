@@ -1,6 +1,4 @@
 // routes.js
-
-import mongoose from "mongoose";
 import * as quizzesDao from "./dao.js";
 
 /**
