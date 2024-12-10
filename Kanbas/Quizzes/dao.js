@@ -1,5 +1,6 @@
 // import Database from "../Database/index.js";
 import model from "./model.js";
+
 export async function findQuizzesForCourse(courseId) {
   return model.find({ course: courseId });
 }
@@ -8,7 +9,8 @@ export async function createQuiz(quiz) {
 }
 
 export async function deleteQuiz(quizId) {
-  return model.findByIdAndDelete(quizId);
+  await model.findByIdAndDelete({ _id: quizId });
+  return;
 }
 
 export async function updateQuiz(quizId, quizUpdates) {
