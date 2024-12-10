@@ -5,7 +5,8 @@ export async function findQuizzesForCourse(courseId) {
   return model.find({ course: courseId });
 }
 export async function createQuiz(quiz) {
-  return model.create(quiz);
+  const data = await model.create(quiz);
+  return data;
 }
 
 export async function deleteQuiz(quizId) {
