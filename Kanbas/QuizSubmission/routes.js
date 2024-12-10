@@ -4,9 +4,9 @@ import * as quizzesDao from "../Quizzes/dao.js";
 export default function QuizSubmissionRoute(app) {
   app.post("/api/quizzes/submission", async (req, res) => {
     const quizAttempt = req.body;
-    console.log(quizAttempt);
+
     const quiz = await quizzesDao.findQuizById(quizAttempt.quiz);
-    console.log(quiz);
+
     let score = 0;
     quiz.questions.forEach((question) => {
       const response = quizAttempt.responses.find(
@@ -38,7 +38,7 @@ export default function QuizSubmissionRoute(app) {
       }
     });
     quizAttempt.score = score;
-    console.log(quizAttempt.score);
+
     const attempt = await quizSubmissionDao.createQuizSubmission(quizAttempt);
     res.send(attempt);
   });
@@ -57,7 +57,6 @@ export default function QuizSubmissionRoute(app) {
       courseId,
       userId
     );
-    console.log("Fetched Attempts: ", fetchedAttempts);
 
     const latestAttempts = fetchedAttempts.reduce(
       (accumulator, currentAttempt) => {

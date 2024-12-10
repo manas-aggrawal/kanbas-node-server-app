@@ -22,6 +22,6 @@ export async function findQuizForUser(quizId) {
 
 export async function findQuizById(quizId) {
   const quiz = await model.findOne({ _id: quizId });
-  console.log("🚀 ~ findQuizById ~ quiz:", quiz);
+
   return quiz;
 }
