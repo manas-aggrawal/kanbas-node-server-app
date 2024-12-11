@@ -9,7 +9,7 @@ function generateId() {
   for (let i = 0; i < length; i++) {
     id += chars.charAt(Math.floor(Math.random() * chars.length));
   }
-  console.log("🚀 ~ generateId ~ id:", id);
+
   return id;
 }
 
